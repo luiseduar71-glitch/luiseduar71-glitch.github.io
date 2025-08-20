@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calculadora de Carga — Pro</title>
+  <link rel="stylesheet" href="styles.css"/>
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0c0d11">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand__dot"></span>
+      <h1>Calculadora de Carga</h1>
+    </div>
+    <div class="meta">
+      <span class="chip">Dark · Ultra Low-Glare</span>
+      <span class="chip">v2 Pro</span>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2 class="card__title">Datos de carga</h2>
+
+      <div class="form-grid">
+        <div class="field field--span2">
+          <label for="skuInput">SKU</label>
+          <div class="field-row">
+            <input type="number" id="skuInput" placeholder="Ej. 180001" inputmode="numeric"/>
+            <button class="btn btn--primary" onclick="buscarSKU()">Buscar SKU</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="nombreInput">Descripción</label>
+          <input type="text" id="nombreInput" readonly/>
+        </div>
+
+        <div class="field">
+          <label for="uxcInput">Unidades por caja</label>
+          <input type="number" id="uxcInput" readonly/>
+        </div>
+
+        <div class="field">
+          <label for="pesoInput">Peso por unidad (kg)</label>
+          <input type="number" id="pesoInput" readonly/>
+        </div>
+
+        <div class="field">
+          <label for="unidadSelect">Unidad ingresada</label>
+          <select id="unidadSelect">
+            <option value="ST">ST (unidades)</option>
+            <option value="CTN">CTN (cajas)</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="cantidadInput">Cantidad</label>
+          <input type="number" id="cantidadInput" placeholder="Ej. 50"/>
+        </div>
+
+        <div class="field">
+          <label for="metaSelect">Capacidad del camión</label>
+          <select id="metaSelect" onchange="setMeta()">
+            <option value="1.5">1.5 t</option>
+            <option value="3">3 t</option>
+            <option value="5">5 t</option>
+            <option value="8">8 t</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn--success" onclick="agregarSKU()">Agregar SKU</button>
+        <button class="btn btn--ghost" onclick="actualizarCarga()">Actualizar</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="card__title">Resultado</h2>
+      <p class="muted">Carga total: <strong><span id="totalToneladas">0</span> t</strong></p>
+
+      <div class="truck" id="truckCont">
+        <div class="truck__grid"></div>
+        <div class="truck__fill" id="camionRelleno"></div>
+        <div class="truck__icon" id="camionIcono" aria-label="Camión">🚚</div>
+        <div class="truck__shadow"></div>
+      </div>
+      <div class="legend">
+        <span class="dot dot--ok"></span> Óptimo
+        <span class="dot dot--warn"></span> 90%+
+        <span class="dot dot--bad"></span> Lleno
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="card__title">Detalle</h2>
+      <div class="table-wrap">
+        <table id="tablaSKUs" class="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>SKU</th>
+              <th>Nombre</th>
+              <th>Cantidad</th>
+              <th>Unidad</th>
+              <th>Peso Total (t)</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <footer class="foot">
+    <span class="muted">© Calculadora de Carga — Pro</span>
+  </footer>
+
+  <script src="script.js" defer></script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', ()=> {
+        navigator.serviceWorker.register('./sw.js');
+      });
+    }
+  </script>
+</body>
+</html>
